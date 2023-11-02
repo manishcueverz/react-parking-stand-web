@@ -302,11 +302,20 @@ const entrySlice = createSlice({
                 state.pending = 0
             }
         },
+        clearAllData(state, action) {
+            state.items = []
+            state.count = 0
+            state.headerStatus = 'All'
+            state.totalIncome = 0
+            state.totalVehicle = 0
+            state.done = 0
+            state.pending = 0
+        }
     },
 
 })
 
-export const { addEntry, headerInfo, updateEnty, deleteRntry } = entrySlice.actions;
+export const { addEntry, headerInfo, updateEnty, deleteRntry, clearAllData } = entrySlice.actions;
 export const getheaderStatus = (state) => state.entry.headerStatus;
 export const gettotalIncome = (state) => state.entry.totalIncome;
 export const gettotalVehicle = (state) => state.entry.totalVehicle;

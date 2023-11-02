@@ -13,7 +13,8 @@ import {
   getpending,
   getEntryItems,
   updateEnty,
-  deleteRntry
+  deleteRntry,
+  clearAllData
 } from "../redux/entrySlice";
 import { format, formatDistanceStrict } from 'date-fns';
 import { AiOutlineDelete } from "react-icons/ai"
@@ -166,6 +167,10 @@ const DashBord = () => {
     return `${dataval} / $${cost}`
   }
 
+  const handleClearAllDate = () => {
+    dispatch(clearAllData())
+  }
+
   return (
     <div className=' grid  grid-cols-12'>
       <div className=' col-span-12  h-[80px] flex justify-between items-center p-7 fixed top-0 bg-white w-full'>
@@ -176,15 +181,23 @@ const DashBord = () => {
           <p className=' text-lg  ml-7'>Completed : {done}</p>
           <p className=' text-lg  ml-7'>Pending : {pending}</p>
         </div>
-        <select
-          onChange={handleChangDate}
-          id="pricingType" name="pricingType"
-          class=" w-28 h-10 border-2 text-black rounded-full px-2 md:px-3 py-0 md:py-1 tracking-wider  mr-5 text-xs">
-          <option value="All" selected="" className=' text-lg'>All</option>
-          <option value="Today" className=' text-lg'>Today</option>
-          <option value="Week" className=' text-lg'>Week</option>
-          <option value="Month" className=' text-lg'>Month</option>
-        </select>
+        <div>
+          <select
+            onChange={handleChangDate}
+            id="pricingType" name="pricingType"
+            class=" w-28 h-10 border-2 text-black rounded-full px-2 md:px-3 py-0 md:py-1 tracking-wider  mr-5 text-xs">
+            <option value="All" selected="" className=' text-lg'>All</option>
+            <option value="Today" className=' text-lg'>Today</option>
+            <option value="Week" className=' text-lg'>Week</option>
+            <option value="Month" className=' text-lg'>Month</option>
+          </select>
+          <button
+            onClick={() => { handleClearAllDate() }}
+            className="text-xs font-bold">
+            <AiOutlineDelete size={18} />
+          </button>
+        </div>
+
       </div>
       <div className=' col-span-9 bg-slate-800 min-h-[100ch] p-10'>
         <div className=' mt-20 flex justify-center mb-10'>
