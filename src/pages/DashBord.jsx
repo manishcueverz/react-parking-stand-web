@@ -19,6 +19,7 @@ import {
 import { format, formatDistanceStrict } from 'date-fns';
 import { AiOutlineDelete } from "react-icons/ai"
 import { BsCheckCircle } from "react-icons/bs"
+import { FiLogOut } from "react-icons/fi"
 
 const DashBord = () => {
 
@@ -174,15 +175,18 @@ const DashBord = () => {
   return (
     <div className=' grid  grid-cols-12'>
       <div className=' col-span-12  h-[80px] flex justify-between items-center p-7 fixed top-0 bg-white w-full'>
-        <p className=' text-lg font-bold '>PARKING STAND</p>
-        <div className=' flex justify-center'>
-          <p className=' text-lg ml-7'>Total Income : ${totalIncome}</p>
-          <p className=' text-lg  ml-7'>Total Vehicle : {totalVehicle}</p>
-          <p className=' text-lg  ml-7'>Completed : {done}</p>
-          <p className=' text-lg  ml-7'>Pending : {pending}</p>
+      <p className=' text-lg font-bold '>PARKING STAND</p>
+        <div className=' flex justify-between items-center'>
+          <div className=' flex justify-center'>
+            <p className=' text-lg ml-7'>Total Income : ${totalIncome}</p>
+            <p className=' text-lg  ml-7'>Total Vehicle : {totalVehicle}</p>
+            <p className=' text-lg  ml-7'>Completed : {done}</p>
+            <p className=' text-lg  ml-7'>Pending : {pending}</p>
+          </div>
         </div>
-        <div>
-          <select
+      
+        <div className=' flex justify-between items-center'>
+        <select
             onChange={handleChangDate}
             id="pricingType" name="pricingType"
             class=" w-28 h-10 border-2 text-black rounded-full px-2 md:px-3 py-0 md:py-1 tracking-wider  mr-5 text-xs">
@@ -193,11 +197,15 @@ const DashBord = () => {
           </select>
           <button
             onClick={() => { handleClearAllDate() }}
-            className="text-xs font-bold">
+            className="text-xs font-bold ml-2 flex">
             <AiOutlineDelete size={18} />
           </button>
+          <button
+            className="text-xs font-bold ml-7 flex">
+            <FiLogOut size={18} />
+          </button>
         </div>
-
+        
       </div>
       <div className=' col-span-9 bg-slate-800 min-h-[100ch] p-10'>
         <div className=' mt-20 flex justify-center mb-10'>
