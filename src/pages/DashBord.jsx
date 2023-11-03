@@ -20,10 +20,12 @@ import { format, formatDistanceStrict } from 'date-fns';
 import { AiOutlineDelete } from "react-icons/ai"
 import { BsCheckCircle } from "react-icons/bs"
 import { FiLogOut } from "react-icons/fi"
+import Chart from '../components/Chart'
 
 const DashBord = () => {
 
   const dispatch = useDispatch()
+  const [chart, setChart] = useState(false)
   const entryItemsRV = useSelector(getEntryItems)
   const [searchEntryList, setSearchEntryList] = useState([])
   const [activeVehicle, setActiveVehicle] = useState('car')
@@ -68,6 +70,7 @@ const DashBord = () => {
       document.getElementById("mobilenumber").value = "";
       document.getElementById("vehiclenumber").value = "";
       setActiveVehicle('car')
+      // setChart(false)
     }
   };
   const handleChangDate = event => {
@@ -175,7 +178,7 @@ const DashBord = () => {
   return (
     <div className=' grid  grid-cols-12'>
       <div className=' col-span-12  h-[80px] flex justify-between items-center p-7 fixed top-0 bg-white w-full'>
-      <p className=' text-lg font-bold '>PARKING STAND</p>
+        <p className=' text-lg font-bold '>PARKING STAND</p>
         <div className=' flex justify-between items-center'>
           <div className=' flex justify-center'>
             <p className=' text-lg ml-7'>Total Income : ${totalIncome}</p>
@@ -184,9 +187,9 @@ const DashBord = () => {
             <p className=' text-lg  ml-7'>Pending : {pending}</p>
           </div>
         </div>
-      
+
         <div className=' flex justify-between items-center'>
-        <select
+          <select
             onChange={handleChangDate}
             id="pricingType" name="pricingType"
             class=" w-28 h-10 border-2 text-black rounded-full px-2 md:px-3 py-0 md:py-1 tracking-wider  mr-5 text-xs">
@@ -196,8 +199,18 @@ const DashBord = () => {
             <option value="Month" className=' text-lg'>Month</option>
           </select>
           <button
-            onClick={() => { handleClearAllDate() }}
+            onClick={() => setChart(false)}
             className="text-xs font-bold ml-2 flex">
+            Entries
+          </button>
+          <button
+            onClick={() => setChart(true)}
+            className="text-xs font-bold ml-5 flex">
+            Analytics
+          </button>
+          <button
+            onClick={() => { handleClearAllDate() }}
+            className="text-xs font-bold ml-5 flex">
             <AiOutlineDelete size={18} />
           </button>
           <button
@@ -205,127 +218,130 @@ const DashBord = () => {
             <FiLogOut size={18} />
           </button>
         </div>
-        
+
       </div>
       <div className=' col-span-9 bg-slate-800 min-h-[100ch] p-10'>
-        <div className=' mt-20 flex justify-center mb-10'>
-          <form className=' ml-7 mr-7 mt-4 w-2/4'>
-            <label for="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-            <div className="">
-              <input
-                value={searchValue}
-                onChange={(e) => handleChangeSearch(e.target.value)}
-                type="search" id="default-search" className="block w-full p-3 pl-10 text-sm  border border-gray-200 rounded-full shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px] bg-white  text-black " placeholder="Search" required />
-            </div>
-          </form>
-        </div>
-
-        <div className='  bg-white rounded-xl ml-4 mr-4 mt-5 p-4 content-center'>
-          {searchValue === '' ? <ItemList /> : <>
-            <p>Search result.....</p>
-            <div className="sm:px-6 w-full">
-              <div className="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
-                {searchEntryList.map((item => {
-                  return (
-                    <table className="w-full whitespace-nowrap">
-                      <tbody>
-                        <tr className="h-16 border border-gray-100 rounded" key={item.id}>
-                          <td className="pl-3">
-                            <div className="flex items-center">
-
-                              <p className="text-xs leading-none text-gray-600 ml-2">{item.id}</p>
-                            </div>
-                          </td>
-                          <td className="pl-5">
-                            <div className="flex items-center pl-5">
-                              <div>
-                                <p className="text-xs font-medium leading-none text-gray-700 mr-2">{item.userName}</p>
-                                <p className=" text-xs leading-none text-gray-600 mr-2 mt-2">{item.userMobileNumber}</p>
-                              </div>
-                            </div>
-
-                          </td>
-                          <td className="pl-5">
-                            <div className="flex items-center pl-5">
-                              <div>
-                                <p className="text-xs font-medium leading-none text-gray-700 mr-2">{item.vehicleType}</p>
-                                <p className=" text-xs leading-none text-gray-600 mr-2 mt-2">{item.vehicleNumber}</p>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="pl-5">
-                            <div className="flex items-center">
-                              <p className="text-xs leading-none text-gray-600 ml-2">{dateFormat(item.inTime)}</p>
-                            </div>
-                          </td>
-                          <td className="pl-5">
-                            <div className="flex items-center">
-                              <p className="text-xs leading-none text-gray-600 ml-2">{item.status === 'Done' ? dateFormat(item.outTime) : ''}</p>
-                            </div>
-                          </td>
-                          <td className="pl-5">
-                            <div className="flex items-center">
-                              <p className={`text-xs leading-none text-white ml-2 ${item.status === 'Done' ? " bg-green-300" : "bg-red-400"}  p-1`}>{item.status}</p>
-                            </div>
-                          </td>
-                          <td className="pl-5">
-                            <div className="flex items-center">
-                              <p className="text-xs leading-none text-gray-600 ml-2">{
-                                item.status === 'Done' ? totalDateAndCostDone(item.inTime, item.outTime, item.vehicleType) :
-                                  totalDateAndCost(item.inTime, item.vehicleType)}</p>
-                            </div>
-                          </td>
-                          <td className="pl-8 pr-5">
-                            <div className="flex items-center">
-                              {item.status !== "Done" ?
-                                <div className=" flex justify-between items-center">
-                                  <button
-                                    onClick={() => handleUpdate(item)}
-                                    className="text-xs font-bold">
-                                    <BsCheckCircle color="green" size={15} />
-                                  </button>
-                                  <p className="ml-2 mr-2"> / </p>
-                                  <button
-                                    onClick={() => handleDelete(item.id)}
-                                    className="text-xs font-bold">
-                                    <AiOutlineDelete color="red" size={17} />
-                                  </button>
-                                </div>
-                                :
-                                <div className=" flex justify-between items-center">
-                                  <button
-                                    className="text-xs font-bold">
-                                    --
-                                  </button>
-                                  <p className="ml-2 mr-2"> / </p>
-                                  <button
-                                    onClick={() => handleDelete(item.id)}
-                                    className="text-xs font-bold">
-                                    <AiOutlineDelete color="red" size={17} />
-                                  </button>
-                                </div>
-                              }
-                            </div>
-                          </td>
-
-                        </tr>
-
-                      </tbody>
-
-                    </table>
-
-
-                  )
-                }))}
-                {searchEntryList.length === 0 ? <p>No date fund !</p> : <p></p>}
-              </div>
+        {chart ? <Chart /> :
+          <>
+            <div className=' mt-20 flex justify-center mb-10'>
+              <form className=' ml-7 mr-7 mt-4 w-2/4'>
+                <label for="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                <div className="">
+                  <input
+                    value={searchValue}
+                    onChange={(e) => handleChangeSearch(e.target.value)}
+                    type="search" id="default-search" className="block w-full p-3 pl-10 text-sm  border border-gray-200 rounded-full shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px] bg-white  text-black " placeholder="Search" required />
+                </div>
+              </form>
             </div>
 
+            <div className='  bg-white rounded-xl ml-4 mr-4 mt-5 p-4 content-center'>
+              {searchValue === '' ? <ItemList /> : <>
+                <p>Search result.....</p>
+                <div className="sm:px-6 w-full">
+                  <div className="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
+                    {searchEntryList.map((item => {
+                      return (
+                        <table className="w-full whitespace-nowrap">
+                          <tbody>
+                            <tr className="h-16 border border-gray-100 rounded" key={item.id}>
+                              <td className="pl-3">
+                                <div className="flex items-center">
 
-          </>}
+                                  <p className="text-xs leading-none text-gray-600 ml-2">{item.id}</p>
+                                </div>
+                              </td>
+                              <td className="pl-5">
+                                <div className="flex items-center pl-5">
+                                  <div>
+                                    <p className="text-xs font-medium leading-none text-gray-700 mr-2">{item.userName}</p>
+                                    <p className=" text-xs leading-none text-gray-600 mr-2 mt-2">{item.userMobileNumber}</p>
+                                  </div>
+                                </div>
 
-        </div>
+                              </td>
+                              <td className="pl-5">
+                                <div className="flex items-center pl-5">
+                                  <div>
+                                    <p className="text-xs font-medium leading-none text-gray-700 mr-2">{item.vehicleType}</p>
+                                    <p className=" text-xs leading-none text-gray-600 mr-2 mt-2">{item.vehicleNumber}</p>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="pl-5">
+                                <div className="flex items-center">
+                                  <p className="text-xs leading-none text-gray-600 ml-2">{dateFormat(item.inTime)}</p>
+                                </div>
+                              </td>
+                              <td className="pl-5">
+                                <div className="flex items-center">
+                                  <p className="text-xs leading-none text-gray-600 ml-2">{item.status === 'Done' ? dateFormat(item.outTime) : ''}</p>
+                                </div>
+                              </td>
+                              <td className="pl-5">
+                                <div className="flex items-center">
+                                  <p className={`text-xs leading-none text-white ml-2 ${item.status === 'Done' ? " bg-green-300" : "bg-red-400"}  p-1`}>{item.status}</p>
+                                </div>
+                              </td>
+                              <td className="pl-5">
+                                <div className="flex items-center">
+                                  <p className="text-xs leading-none text-gray-600 ml-2">{
+                                    item.status === 'Done' ? totalDateAndCostDone(item.inTime, item.outTime, item.vehicleType) :
+                                      totalDateAndCost(item.inTime, item.vehicleType)}</p>
+                                </div>
+                              </td>
+                              <td className="pl-8 pr-5">
+                                <div className="flex items-center">
+                                  {item.status !== "Done" ?
+                                    <div className=" flex justify-between items-center">
+                                      <button
+                                        onClick={() => handleUpdate(item)}
+                                        className="text-xs font-bold">
+                                        <BsCheckCircle color="green" size={15} />
+                                      </button>
+                                      <p className="ml-2 mr-2"> / </p>
+                                      <button
+                                        onClick={() => handleDelete(item.id)}
+                                        className="text-xs font-bold">
+                                        <AiOutlineDelete color="red" size={17} />
+                                      </button>
+                                    </div>
+                                    :
+                                    <div className=" flex justify-between items-center">
+                                      <button
+                                        className="text-xs font-bold">
+                                        --
+                                      </button>
+                                      <p className="ml-2 mr-2"> / </p>
+                                      <button
+                                        onClick={() => handleDelete(item.id)}
+                                        className="text-xs font-bold">
+                                        <AiOutlineDelete color="red" size={17} />
+                                      </button>
+                                    </div>
+                                  }
+                                </div>
+                              </td>
 
+                            </tr>
+
+                          </tbody>
+
+                        </table>
+
+
+                      )
+                    }))}
+                    {searchEntryList.length === 0 ? <p>No date fund !</p> : <p></p>}
+                  </div>
+                </div>
+
+
+              </>}
+
+            </div>
+          </>
+        }
       </div>
       <div className=' col-span-3 p-10  bg-slate-300 fixed top-[80px] right-0'>
         <p className=' text-lg font-bold '>Add New Entry</p>

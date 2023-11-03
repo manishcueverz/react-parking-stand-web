@@ -3,7 +3,9 @@ import React, { useState } from 'react'
 
 const Auth = () => {
   const [signin, setsignin] = useState(true);
-  
+  const [name, setName] = useState('');
+  const [mobile, setMobile] = useState('');
+	const [password, setPassword] = useState('');
   return (
     <div className=" min-h-screen bg-slate-200 w-full py-16 px-4">
       <div className="flex flex-col items-center justify-center">
@@ -15,7 +17,9 @@ const Auth = () => {
             </p>
             <div className='mt-5'>
               <lable className="text-sm font-medium leading-none text-gray-800">Mobile</lable>
-              <input aria-label="enter mobile number" type="mobile" className="bg-gray-200 border rounded focus:outline-none text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2" />
+              <input 
+              onChange={(e) => setMobile(e.target.value)}
+              aria-label="enter mobile number" type="mobile" className="bg-gray-200 border rounded focus:outline-none text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2" />
             </div>
             <div className="mt-6  w-full">
               <lable className="text-sm font-medium leading-none text-gray-800">Password</lable>
