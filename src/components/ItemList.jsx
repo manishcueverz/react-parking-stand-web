@@ -24,6 +24,7 @@ function ItemList() {
                 setLoader(false)
             }, 1000);
     }, [entryItemsRV])
+
     useEffect(() => {
         setLoader(true)
         setTimeout(
@@ -85,10 +86,12 @@ function ItemList() {
 
             }, 1000);
     }, [dateFilter, entryItemsRV, statusFilter])
+
     const dateFormat = (value) => {
         const val = format(new Date(value), 'dd/MM/yyyy, h:mm a');
         return val
     }
+
     const handleChangDate = event => {
         if (event.target.value === 'All') {
             setDateFilter('All')
@@ -106,10 +109,12 @@ function ItemList() {
             }
         }
     }
+    
     const handleChangeStatus = (value) => {
         setStatusFilter(value)
         console.log(`update statusFilter ${value} `)
     }
+
     const handleUpdate = (value) => {
         console.log(value)
         const dat = new Date(value.inTime)
@@ -137,6 +142,7 @@ function ItemList() {
         }
         dispatch(updateEnty(ud))
     }
+    
     const handleDelete = (value) => {
         dispatch(deleteRntry(value))
     }

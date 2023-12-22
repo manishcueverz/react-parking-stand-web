@@ -43,14 +43,19 @@ const DashBord = () => {
     });
     console.log(formData)
   };
+  
   useEffect(() => {
     dispatch(headerInfo('All'))
   }, [dispatch])
+
   const handleAddEntry = () => {
     if (document.getElementById("name").value !== '' &&
       document.getElementById("mobilenumber").value !== '' &&
       document.getElementById("vehiclenumber").value !== '') {
-      const newId = entryItemsRV.length !== 0 ? Number(entryItemsRV[0].id) + 1 : 1
+      const currentDate = new Date();
+      const formattedDate = currentDate.toISOString().slice(0, 10).replace(/-/g, '');
+      const entryCount = entryItemsRV.length !== 0 ? entryItemsRV.length + 1 : 1
+      const newId = formattedDate + entryCount
       let date = {
         id: newId,
         userName: formData.name,
@@ -73,6 +78,7 @@ const DashBord = () => {
       // setChart(false)
     }
   };
+
   const handleChangDate = event => {
     if (event.target.value === 'All') {
       dispatch(headerInfo('All'))
@@ -90,26 +96,38 @@ const DashBord = () => {
       }
     }
   }
+
   const handleChangeSearch = (value) => {
     setSearchValue(value);
     filterData(value);
   }
+
   const filterData = (value) => {
     const lowercasedValue = value
       .toLowerCase()
       .trim()
       .replace(/[^\w\s]/gi, "");
-    if (lowercasedValue !== "") {
-      const filteredData = entryItemsRV.filter((item) => item.id === Number(lowercasedValue));
+    if (lowercasedValue === "") setSearchEntryList(entryItemsRV);
+    else {
+      const filteredData = entryItemsRV.filter((item) => {
+        return Object.keys(item).some((key) =>
+          [].includes(key)
+            ? false
+            : item[key]
+              .toString()
+              .toLowerCase()
+              .includes(lowercasedValue)
+        );
+      });
       setSearchEntryList(filteredData);
-    } else {
-      setSearchEntryList([])
     }
   };
+
   const dateFormat = (value) => {
     const val = format(new Date(value), 'dd/MM/yyyy, h:mm a');
     return val
   }
+
   const handleUpdate = (value) => {
     console.log(value)
     const dat = new Date(value.inTime)
@@ -138,10 +156,12 @@ const DashBord = () => {
     dispatch(updateEnty(ud))
     setSearchValue('')
   }
+
   const handleDelete = (value) => {
     dispatch(deleteRntry(value))
     setSearchValue('')
   }
+
   const totalDateAndCost = (date, vehicleType) => {
     const dat = new Date(date)
     const currentdate = new Date()
@@ -157,6 +177,7 @@ const DashBord = () => {
 
     //return val
   }
+
   const totalDateAndCostDone = (inDate, OutDate, vehicleType,) => {
     const dat = new Date(inDate)
     const currentdate = new Date(OutDate)

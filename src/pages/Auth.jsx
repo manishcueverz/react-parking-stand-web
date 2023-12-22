@@ -6,6 +6,7 @@ const Auth = () => {
   const [name, setName] = useState('');
   const [mobile, setMobile] = useState('');
 	const [password, setPassword] = useState('');
+  
   return (
     <div className=" min-h-screen bg-slate-200 w-full py-16 px-4">
       <div className="flex flex-col items-center justify-center">
